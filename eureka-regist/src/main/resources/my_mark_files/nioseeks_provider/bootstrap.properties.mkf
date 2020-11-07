@@ -1,0 +1,56 @@
+# \u89E3\u51B3bean\u91CD\u590D\u5B9A\u4E49\u7684\u3002\u8BBE\u7F6E\u4E3Atrue\u65F6\uFF0C\u540E\u5B9A\u4E49\u7684bean\u4F1A\u8986\u76D6\u4E4B\u524D\u5B9A\u4E49\u7684\u76F8\u540C\u540D\u79F0\u7684bean
+spring.main.allow-bean-definition-overriding=true
+spring.application.name=thinkd-admin-config
+##server.port=${random.int(9810,9819)}
+#server.port=9810
+# JWT\u6A21\u5F0F\u7BA1\u7406token \u8BA4\u8BC1\u670D\u52A1\u7AEFJwtAccessTokenConverter\u8BBE\u7F6E\u7684SigningKey==key-value\uFF0C\u4E0D\u7136\u4F1A\u5BFC\u81F4\u65E0\u6CD5\u6B63\u5E38\u89E3\u7801JWT
+#security.oauth2.resource.jwt.key-uri=http://localhost:9810/oauth/token_key
+#security.oauth2.resource.jwt.key-value=dev
+## \u670D\u52A1\u53D1\u73B0\u4E0E\u6CE8\u518C\u6539\u4E3A\u5931\u6548\uFF0C\u5728Spring\u5BB9\u5668\u4E2D\uFF0C\u53D1\u73B0\u4E86\u4E24\u4E2A\u7236\u7C7B\u4E3AAutoServiceRegistration\u7684bean\uFF0C\u5206\u522B\u662FnacosAutoServiceRegistration\u548CeurekaAutoServiceRegistration
+##spring.autoconfigure.exclude=org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationAutoConfiguration
+config.prod.ip=172.17.239.82
+# springCloud\u914D\u7F6Edev/test/prod \u683C\u5F0F\u7C7B\u4F3C(application-${\u914D\u7F6E}.yml) \u9879\u76EE\u542F\u52A8\u4F1A\u52A0\u8F7D\u6FC0\u6D3B\u7684\u914D\u7F6E\u6587\u4EF6,\u4F1A\u6309\u9700\u52A0\u8F7D\u914D\u7F6E\u6587\u4EF6
+spring.profiles.active=prod
+
+###  springCloud-Netflix\u914D\u7F6E eureka\u6CE8\u518C\u4E2D\u5FC3  ## \u663E\u793A\u670D\u52A1\u5668IP
+##eureka.instance.ip-address=true
+###eureka.client.service-url.defaultZone=http://${config.prod.ip}:9000/eureka,http://${config.prod.ip}:9001/eureka
+###management.endpoints.web.exposure.include=*
+###  Nacos\u6574\u5408springCloud\u914D\u7F6E\u3001\u6CE8\u518C\u4E2D\u5FC3
+### \u5728Nacos Spring Cloud\u4E2D\uFF0CdataId\u7684\u5B8C\u6574\u683C\u5F0F\uFF1A${prefix}-${spring.profiles.active}.${file-extension}
+### prefix\uFF1A\u9ED8\u8BA4spring.application.name\u503C\uFF0C\u4E5F\u53EF\u4EE5\u901A\u8FC7\u914D\u7F6Espring.cloud.nacos.config.prefix\u6765\u914D\u7F6E
+### spring.profiles.active\uFF1A\u5F53\u524D\u73AF\u5883\u5BF9\u5E94\u7684profile\uFF0C\u6CE8\u610F\uFF1A\u5F53spring.profiles.active\u4E3A\u7A7A\u65F6\uFF0C
+### \u5BF9\u5E94\u7684\u8FDE\u63A5\u7B26 - \u4E5F\u5C06\u4E0D\u5B58\u5728\uFF0CdataId\u7684\u62FC\u63A5\u683C\u5F0F\u53D8\u6210 ${prefix}.${file-extension}
+###  Nacos server\u6CE8\u518C\u4E2D\u5FC3  ##  nacos\u914D\u7F6E\u4E2D\u5FC3
+#spring.cloud.nacos.server-addr=${config.prod.ip}:8848
+#spring.cloud.nacos.discovery.server-addr=${spring.cloud.nacos.server-addr}
+#spring.cloud.nacos.config.enabled=true
+#spring.cloud.nacos.config.prefix=${spring.application.name}
+#spring.cloud.nacos.config.server-addr=${spring.cloud.nacos.server-addr}
+#### file-exetension\uFF1A\u914D\u7F6E\u5185\u5BB9\u7684\u6570\u636E\u683C\u5F0F\uFF0C\u53EF\u901A\u8FC7spring.cloud.nacos.config.file-extension\u914D\u7F6E\uFF08properties\u548Cyaml\u4E24\u79CD\u7C7B\u578B\uFF09
+#spring.cloud.nacos.config.file-extension=properties
+
+##  Nacos\u914D\u7F6E \u6574\u5408springBoot\u914D\u7F6E
+nacos.config.bootstrap.enable=true
+nacos.discovery.server-addr=${config.prod.ip}:8848
+nacos.discovery.auto-register=true
+nacos.config.server-addr=${config.prod.ip}:8848
+# \u4E3B\u914D\u7F6E \u914D\u7F6E\u6587\u4EF6\u7C7B\u578B
+nacos.config.type=properties
+# \u4E3B\u914D\u7F6E data-id
+nacos.config.data-id=${spring.application.name}-${spring.profiles.active}.${nacos.config.type}
+# \u4E3B\u914D\u7F6E group-id
+nacos.config.group=DEFAULT_GROUP
+# \u4E3B\u914D\u7F6E \u6700\u5927\u91CD\u8BD5\u6B21\u6570
+#nacos.config.max-retry=10
+# \u4E3B\u914D\u7F6E \u5F00\u542F\u81EA\u52A8\u5237\u65B0
+nacos.config.auto-refresh=true
+# \u4E3B\u914D\u7F6E \u91CD\u8BD5\u65F6\u95F4
+#nacos.config.config-retry-time=2333
+# \u4E3B\u914D\u7F6E \u914D\u7F6E\u76D1\u542C\u957F\u8F6E\u8BE2\u8D85\u65F6\u65F6\u95F4
+#nacos.config.config-long-poll-timeout=46000
+# \u4E3B\u914D\u7F6E \u5F00\u542F\u6CE8\u518C\u76D1\u542C\u5668\u9884\u52A0\u8F7D\u914D\u7F6E\u670D\u52A1\uFF08\u9664\u975E\u7279\u6B8A\u4E1A\u52A1\u9700\u6C42\uFF0C\u5426\u5219\u4E0D\u63A8\u8350\u6253\u5F00\u8BE5\u53C2\u6570\uFF09
+#nacos.config.enable-remote-sync-config=true
+
+
+

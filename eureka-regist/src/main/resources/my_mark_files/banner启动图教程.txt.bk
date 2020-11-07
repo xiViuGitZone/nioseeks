@@ -1,0 +1,49 @@
+SpringBoot初始Banner的代码是 SpringApplicationBannerPrinter 类，SpringBoot默认寻找Banner的顺序是:
+1、首先依次在Classpath下找文件 banner.gif，banner.jpg 和 banner.png，使用优先找到的
+2、若没找到上面文件的话，继续Classpath下找 banner.txt
+3、若上面都没有找到的话, 用默认的 SpringBootBanner，也就是上面输出的 SpringBoot Logo
+
+注：一般是把 banner.* 文件放在src/main/resources/ 目录下
+	我们可以用属性 banner.location 设定 Spring Boot 在不同于 Classpath 下找以上 banner.txt 文件，
+	banner.charset 设定 banner.txt 的字符集，默认为 UTF-8。
+	属性 banner.image.location 用于指定寻找 banner.(gif|jpg|png) 文件的位置。
+注：如果同时存在图片(如 banner.jpg) 和 banner.txt , 则它们会同时显示出来，先图片后文字，
+但同时存在多个图片 banner.(gif|jpg|png)，则只会显示第一张图片。
+对于文本文件，Spring Boot 会将其直接输出。
+对于图像文件（ banner.gif 、banner.jpg 或 banner.png ），Spring Boot 会将图像转为 ASCII 字符，然后输出
+
+application.properties 中与 Banner 相关的配置：
+# banner 模式。有三种模式：console/log/off
+# console打印到控制台（通过System.out）  #log-打印到日志中  #off-关闭打印
+spring.main.banner-mode = off
+# banner 文件编码
+spring.banner.charset = UTF-8
+# banner 文本文件路径
+spring.banner.location = classpath:banner.txt
+# banner 图像文件路径（可以选择 png,jpg,gif 文件）
+spring.banner.image.location = classpath:banner.gif
+used).
+# 图像 banner 的宽度（字符数）
+spring.banner.image.width = 76
+# 图像 banner 的高度（字符数）
+spring.banner.image.height =
+# 图像 banner 的左边界（字符数）
+spring.banner.image.margin = 2
+# 是否将图像转为黑色控制台主题
+spring.banner.image.invert = false
+
+ 常用Banner设置属性
+${AnsiColor.BRIGHT_RED}: 设置控制台中输出内容的颜色;
+${application.version}:用来获取 MANIFEST.MF 文件中的版本号;
+${application.formatted-version}: 格式化后的 ${application.version} 版本信息;
+${spring-boot.version}: Spring Boot 的版本号;
+${spring-boot.formatted-version}: 格式化后的 ${spring-boot.version} 版本信息
+
+代码关闭banner：  取消banner
+SpringApplication app = new SpringApplication(DemoApplication.class);
+app.setBannerMode(Mode.OFF);
+app.run(args);
+
+ 推荐的ASCII Text Signature图案生成网站：
+1、http://patorjk.com/software/taag/
+2、http://www.network-science.de/ascii/

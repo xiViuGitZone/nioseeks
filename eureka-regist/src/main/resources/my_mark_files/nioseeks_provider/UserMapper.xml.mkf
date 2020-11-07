@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tends.aopth.dao.UserMapper">
+    <!--<resultMap id="SysUserMap" type="com.tends.aopth.entity.SysUser">-->
+    <!--    <id column="id" property="id"/>-->
+    <!--    <result column="username" property="username"/>-->
+    <!--    <result column="password" property="password"/>-->
+    <!--    <result column="status" property="status"/>-->
+    <!--    <association property="roles" javaType="java.util.List"-->
+    <!--                 select="findByUserId" autoMapping="true" column="id"/>-->
+    <!--</resultMap>-->
+
+    <select id="findByUsername" resultType="com.tends.aopth.entity.SysUser">
+        SELECT * FROM sys_user WHERE username=#{username} LIMIT 1
+    </select>
+
+
+
+</mapper>

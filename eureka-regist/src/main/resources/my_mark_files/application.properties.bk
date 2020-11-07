@@ -1,0 +1,27 @@
+spring.application.name=eureka-discover
+#server.port=${random.int(8800,8802)}
+server.port=8800
+
+## 不需要检索注册
+eureka.client.fetch-registry=false
+## 不需要在服务中心为自己注册服务
+eureka.client.register-with-eureka=false
+## 注册中心访问url，格式严格数据上下一致
+eureka.client.service-url.defaultZone=http://localhost:${server.port}/eureka
+# 指定通过IP注册,一般服务集群时配置,需要ip-address参数一起设置(保证hostName和ip-address一样)，
+# 以免eureka管理页面出现不可用分片提示信息(unavailable-replicas),
+# 服务的注册默认是通过hostName注册的，当判断注册的hostName和服务
+#eureka.instance.prefer-ip-address=true
+# 中小规模下，自我保护模式坑比好处多，所以关闭它
+eureka.server.enable-self-preservation=false
+# 心跳阈值计算周期，如果开启自我保护模式，可以改一下这个配置
+#eureka.server.renewal-threshold-update-interval-ms=120000
+# 主动失效检测间隔,配置成5秒
+eureka.server.eviction-interval-timer-in-ms=5000
+# 禁用readOnlyCacheMap
+eureka.server.use-read-only-response-cache=false
+#info.app.name=eureka-discover
+#info.company.name=com.tends
+#info.build.artifactId="@project.artifactId@"
+#info.build.version="@project.version@"
+

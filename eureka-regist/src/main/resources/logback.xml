@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 需配置好 log.dir和projectname属性、 <logger/> -->
+<configuration debug="false">
+    <property name="log.dir" value="ActiveLogs/nioseeks_outlog"/>
+    <property name="projectname" value="eureka-discover"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder charset="UTF-8">
+            <pattern>%d [%thread] %-5p [%c:%L]
+                [trace=%X{X-B3-TraceId:-},span=%X{X-B3-SpanId:-},parent=%X{X-B3-ParentSpanId:-}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.dir}/${projectname}.log</file>
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+        <!--    <level>INFO</level>-->
+        <!--    <onMatch>ACCEPT</onMatch>-->
+        <!--    <onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.dir}/${projectname}-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>%d [%thread] %-5p [%c:%L]
+                [trace=%X{X-B3-TraceId:-},span=%X{X-B3-SpanId:-},parent=%X{X-B3-ParentSpanId:-}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.dir}/monitor_${projectname}_error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.dir}/${projectname}-error-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>%d [%thread] %-5p [%c:%L]
+                [trace=%X{X-B3-TraceId:-},span=%X{X-B3-SpanId:-},parent=%X{X-B3-ParentSpanId:-}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.apache">
+        <level value="INFO"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="infoAppender"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="INFO"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="infoAppender"/>
+    </logger>
+    <logger name="com.tends.nioseeks">
+        <level value="INFO"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="infoAppender"/>
+    </logger>
+
+    <logger name="com.netflix">
+        <level value="INFO"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="infoAppender"/>
+    </logger>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
