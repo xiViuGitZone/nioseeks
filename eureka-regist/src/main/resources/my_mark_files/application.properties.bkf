@@ -13,7 +13,7 @@ eureka.client.service-url.defaultZone=http://localhost:${server.port}/eureka
 # 服务的注册默认是通过hostName注册的，当判断注册的hostName和服务
 #eureka.instance.prefer-ip-address=true
 # 中小规模下，自我保护模式坑比好处多，所以关闭它
-eureka.server.enable-self-preservation=false
+#eureka.server.enable-self-preservation=false
 # 心跳阈值计算周期，如果开启自我保护模式，可以改一下这个配置
 #eureka.server.renewal-threshold-update-interval-ms=120000
 # 主动失效检测间隔,配置成5秒

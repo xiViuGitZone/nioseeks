@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.tends.nioseeks</groupId>
+    <artifactId>ioseek-provider</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ioseek-provider</name>
+    <packaging>jar</packaging>
+    <parent>
+        <groupId>com.tends</groupId>
+        <artifactId>nioseeks</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <properties>
+        <netty.boot.version>4.1.53.Final</netty.boot.version>
+        <apache.common.version>3.11</apache.common.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <!--<version>4.1.22.Final</version>-->
+            <version>${netty.boot.version}</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>com.google.protobuf</groupId>-->
+        <!--    <artifactId>protobuf-java</artifactId>-->
+        <!--    &lt;!&ndash;<version>3.5.1</version>&ndash;&gt;-->
+        <!--    <version>3.13.0</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache.common.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

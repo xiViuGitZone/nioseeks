@@ -56,19 +56,18 @@
         <appender-ref ref="errorAppender"/>
         <appender-ref ref="infoAppender"/>
     </logger>
-
     <logger name="org.springframework">
         <level value="INFO"/>
         <appender-ref ref="errorAppender"/>
         <appender-ref ref="infoAppender"/>
     </logger>
-    <logger name="com.tends.nioseeks">
+    <logger name="com.netflix">
         <level value="INFO"/>
         <appender-ref ref="errorAppender"/>
         <appender-ref ref="infoAppender"/>
     </logger>
 
-    <logger name="com.netflix">
+    <logger name="com.tends.nioseeks">
         <level value="INFO"/>
         <appender-ref ref="errorAppender"/>
         <appender-ref ref="infoAppender"/>
