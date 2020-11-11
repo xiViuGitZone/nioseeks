@@ -8,6 +8,17 @@ class EurekaRegistApplicationTests {
 
     @Test
     void contextLoads() {
+        //testNettySockket();
     }
+
+
+
+
+
+
+
+
+
+
 
 }

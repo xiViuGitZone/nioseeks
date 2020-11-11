@@ -25,3 +25,4 @@ eureka.server.use-read-only-response-cache=false
 #info.build.artifactId="@project.artifactId@"
 #info.build.version="@project.version@"
 
+#logging.level.org.springframework=info

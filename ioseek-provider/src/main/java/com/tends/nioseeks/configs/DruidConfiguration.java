@@ -1,5 +1,4 @@
 package com.tends.nioseeks.configs;
-
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
@@ -117,10 +115,21 @@ public class DruidConfiguration {
 
 
 
+    //@Bean(name = "sqlSessionFactory")   //使用spring工厂类创建会话
+    //public SqlSessionFactoryBean createSqlSessionFactoryBean() throws IOException {
+    //    SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+    //    sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis全局配置"));
+    //    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    //    String packageSearchPath = PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "mybatis映射文件";
+    //    sqlSessionFactoryBean.setMapperLocations(resolver.getResources(packageSearchPath));
+    //    sqlSessionFactoryBean.setDataSource("数据库");
+    //    sqlSessionFactoryBean.setTypeAliasesPackage("mybatis别名包");
+    //    return sqlSessionFactoryBean;
+    //}
 
 
 
-
+    
 
 
 

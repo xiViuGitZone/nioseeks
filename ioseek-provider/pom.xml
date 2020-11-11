@@ -16,6 +16,7 @@
     <properties>
         <netty.boot.version>4.1.53.Final</netty.boot.version>
         <apache.common.version>3.11</apache.common.version>
+        <org.msgpack.version>0.6.12</org.msgpack.version>
     </properties>
 
     <dependencies>
@@ -31,11 +32,23 @@
         <!--    &lt;!&ndash;<version>3.5.1</version>&ndash;&gt;-->
         <!--    <version>3.13.0</version>-->
         <!--</dependency>-->
-
+        <!-- MessagePack是编解码工具 高效的二进制序列化框架 -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${apache.common.version}</version>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack</artifactId>
+            <version>${org.msgpack.version}</version>
+        </dependency>
+
+        <!-- Redis依赖包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--devtools热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
