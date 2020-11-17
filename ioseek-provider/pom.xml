@@ -39,6 +39,31 @@
             <version>${org.msgpack.version}</version>
         </dependency>
 
+
+        <!--&lt;!&ndash; 添加ES的依赖 &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>org.elasticsearch</groupId>-->
+        <!--    <artifactId>elasticsearch</artifactId>-->
+        <!--    <version>7.10.0</version>-->
+        <!--</dependency>-->
+        <!-- HighLevelClient必要依赖 -->
+        <!--<dependency>-->
+        <!--    <groupId>org.elasticsearch.client</groupId>-->
+        <!--    <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+        <!--    <version>7.10.0</version>-->
+        <!--</dependency>-->
+        <!-- springBoot添加ES整合的依赖 对应的rest-client版本只有7.6.2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!--&lt;!&ndash; 一些相关ES依赖，可不添加 &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.data</groupId>-->
+        <!--    <artifactId>spring-data-elasticsearch</artifactId>-->
+        <!--</dependency>-->
+        
+
         <!-- Redis依赖包 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

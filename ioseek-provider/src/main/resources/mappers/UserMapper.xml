@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tends.nioseeks.elasticsearch.mapper.UserMapper">
+
+    <select id="findByUsername" resultType="com.tends.nioseeks.elasticsearch.pojo.SysUser">
+        SELECT * FROM sys_user WHERE username=#{username} LIMIT 1
+    </select>
+
+    <select id="findUserById" resultType="com.tends.nioseeks.elasticsearch.pojo.SysUser">
+        SELECT * FROM sys_user WHERE id=#{userId} LIMIT 1
+    </select>
+    
+    <select id="findSysUserAll" resultType="com.tends.nioseeks.elasticsearch.pojo.SysUser">
+        SELECT * FROM sys_user LIMIT 0, 1000
+    </select>
+
+
+    <insert id="insertUser" parameterType="com.tends.nioseeks.elasticsearch.pojo.SysUser"
+                keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO sys_user (
+           username,
+           password,
+           salt,
+           status,
+           remarks,
+           created,
+           updated
+       )  VALUES  (
+           #{user.username},
+           #{user.password},
+           "",
+           #{user.status},
+           "",
+           NOW(),
+           NOW()
+       )
+    </insert>
+
+
+    <insert id="insertSysUserRole" parameterType="com.tends.nioseeks.elasticsearch.pojo.sysUserRole"
+                keyColumn="pk" useGeneratedKeys="true" keyProperty="pk">
+       INSERT INTO sys_user_role (
+           uid,
+           rid,
+           created,
+           updated
+       )  VALUES  (
+           #{userRoles.uid},
+           #{userRoles.rid},
+           NOW(),
+           NOW()
+       )
+    </insert>
+
+
+    <select id="findUserRolesByUserId" resultType="com.tends.nioseeks.elasticsearch.pojo.SysRole">
+        <!-- SELECT r.id, r.role_name, r.role_desc FROM sys_role r -->
+        SELECT DISTINCT r.role_name FROM sys_role r
+        INNER JOIN sys_user_role ur ON r.id=ur.rid
+        INNER JOIN sys_user u ON ur.uid=u.id WHERE ur.uid=#{uid}   
+    </select>
+
+
+
+
+</mapper>

@@ -6,6 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+
+//@EnableElasticsearchRepositories(value = "com.tends.nioseeks.elasticsearch.mapper")
 public class IoseekProviderApplication {
 
     public static void main(String[] args) {
