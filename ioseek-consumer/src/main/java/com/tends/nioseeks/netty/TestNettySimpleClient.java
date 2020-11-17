@@ -1,25 +1,29 @@
-package com.tends.nioseeks.netty.clients;
+package com.tends.nioseeks.netty;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
 //Netty 客户端
-public class NettyClientTest {
+public class TestNettySimpleClient {
     private Logger log = LoggerFactory.getLogger(getClass());
     private EventLoopGroup workGroup  = new NioEventLoopGroup(); //初始化用于连接及I/O工作的"主线程池"
     private String host;
     private int port;
 
 
-    public NettyClientTest(String host, int port) {
+    public TestNettySimpleClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -37,7 +41,7 @@ public class NettyClientTest {
             // 是否启用心跳保活机制,在双方TCP套接字建立连接后（即都进入ESTABLISHED状态）
             // 并且在两个小时左右上层没有任何数据传输的情况下，这套机制才会被激活
             bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-            bootstrap.handler(new NettyClientInitializer()); //设置SocketChannel的处理器，实际业务处理
+            bootstrap.handler(initChildNettyClient()); //设置SocketChannel的处理器，实际业务处理
 
             //连接指定的服务地址
             Channel channel = bootstrap.connect(host, port).sync().channel();
@@ -65,11 +69,36 @@ public class NettyClientTest {
         }
     }
 
+    //客户端Channel初始化
+    private static ChannelInitializer<SocketChannel> initChildNettyClient() {
+        final int MAX_FRAMEL_LEN = 8192;
+        return new ChannelInitializer<SocketChannel> (){
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                ChannelPipeline pipeline = socketChannel.pipeline();
+                pipeline.addLast(new DelimiterBasedFrameDecoder(MAX_FRAMEL_LEN, Delimiters.lineDelimiter()));
+                pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
+                pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
+                pipeline.addLast(initChannelHandler());
+            }
+        };
+    }
+    //客户端Channel初始化处理器Handler
+    private static SimpleChannelInboundHandler initChannelHandler() {
+        return new SimpleChannelInboundHandler(){
+            @Override
+            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+                System.out.println("收到服务端消息: " + o);
+            }
+        };
+    }
+
+
 
     public static void main(String[] args) {
         String host = "127.0.0.1";
         int port = 7777;
-        NettyClientTest nettyClient = new NettyClientTest(host, port);
+        TestNettySimpleClient nettyClient = new TestNettySimpleClient(host, port);
 
         Scanner scn = new Scanner(System.in);
         String strs = scn.nextLine();

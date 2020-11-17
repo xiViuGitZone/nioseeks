@@ -1,20 +1,28 @@
 package com.tends.nioseeks.netty;
 
+import com.alibaba.fastjson.JSON;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
+import java.util.Map;
+
 @Component
 @Slf4j       //Netty 服务端
-public class NettyServer {
+public class TestNettySimpleServer {
     @Value("${netty.port}")
     private Integer nettyPort;
     //初始化用于Acceptor的主"线程池" 以及 用于I/O工作的从"线程池"
@@ -36,7 +44,7 @@ public class NettyServer {
             serverBootstrap.channel(NioServerSocketChannel.class); //指定channel类型，服务端是NioServerSocketChannel
             serverBootstrap.handler(new LoggingHandler(LogLevel.INFO)); //设置ServerSocketChannel的处理器
             //设置子通道也就是SocketChannel的处理器， 其内部是具体业务开发的逻辑
-            serverBootstrap.childHandler(new NettyServerInitializer());
+            serverBootstrap.childHandler(initServerChildNettyClient());
 
             // 服务端TCP内核模块维护2个队列,三次握手后accept从队列2中取出完成三次握手的连接,队列1和队列2的长度之和是backlog
             // 服务端处理客户端连接请求是顺序处理的,backlog对程序支持的连接数无影响,它影响的只是还没有被accept 取出的连接
@@ -67,5 +75,80 @@ public class NettyServer {
             workerGroup.shutdownGracefully();
         }
     }
+
+
+    //服务端Channel初始化
+    private static ChannelInitializer<SocketChannel> initServerChildNettyClient() {
+        final int MAX_FRAMEL_LEN = 8192;
+        return new ChannelInitializer<SocketChannel> (){
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                ChannelPipeline pipeline = socketChannel.pipeline();
+                pipeline.addLast(new DelimiterBasedFrameDecoder(MAX_FRAMEL_LEN, Delimiters.lineDelimiter()));
+                pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
+                pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
+                pipeline.addLast(initServerChannelHandler());
+
+                //// 定义分隔符为$$（字符串末尾分割）
+                //ByteBuf delimiter = Unpooled.copiedBuffer("$$".getBytes());
+                //// 添加分隔符解码器，通过分隔符来解决拆包粘包的问题
+                //pipeline.addLast(new DelimiterBasedFrameDecoder(2048, delimiter));
+                //// 自定义解码器，用来获取数据并做持久化处理
+                //pipeline.addLast(demoderServerHandler);
+            }
+        };
+    }
+
+    //服务端Channel初始化处理器Handler
+    private static SimpleChannelInboundHandler<String> initServerChannelHandler() {
+        return new SimpleChannelInboundHandler<String>(){
+            @Override
+            protected void channelRead0(ChannelHandlerContext ctx, String msg) {
+                StringBuilder sb = new StringBuilder();
+                Map<String, Object> result = null;
+                try {
+                    // 报文解析处理
+                    result = JSON.parseObject(msg);
+                    sb.append(result);
+                    sb.append("解析成功\n");
+
+                    ctx.writeAndFlush(sb);
+                } catch (Exception e) {
+                    log.error("报文解析失败，异常信息: 【{}】", e);
+                    String errorCode = "读取失败！ 解析异常 -1\n";
+                    ctx.writeAndFlush(errorCode);
+                }
+            }
+
+            @Override
+            public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+                String clientIp = insocket.getAddress().getHostAddress();
+                log.info("收到客户端[ip:" + clientIp + "]连接");
+            }
+
+            @Override
+            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                // 当出现异常就关闭连接
+                InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+                String clientIp = insocket.getAddress().getHostAddress();
+                log.info("客户端[ip:" + clientIp + "]连接出现异常，服务器主动关闭连接。。。", cause);
+                ctx.close();
+            }
+        };
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

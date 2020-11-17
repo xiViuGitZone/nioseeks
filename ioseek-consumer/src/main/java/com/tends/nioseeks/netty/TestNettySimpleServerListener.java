@@ -7,9 +7,9 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener      //Netty 服务监听器
 @Slf4j
-public class NettyServerListener implements ServletContextListener {
+public class TestNettySimpleServerListener implements ServletContextListener {
     @Autowired
-    private NettyServer nettyServer;   //注入NettyServer
+    private TestNettySimpleServer nettyServer;   //注入NettyServer
 
 
     @Override
